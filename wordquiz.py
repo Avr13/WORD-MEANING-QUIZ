@@ -8,7 +8,7 @@ class QUIZ():
         self.num_of_ques = int(input("\nHow many words would you like to be tested on: "))
         self.file_name = 'words.csv'
         self.row_range_start = 1
-        self.row_range_end = 10
+        self.row_range_end = 1
         self.last_question_asked = None
         self.incorrect = []
         self.load_game()
@@ -20,8 +20,6 @@ class QUIZ():
     
     def load_game(self):
         df = pd.read_csv(self.file_name)
-        if self.row_range_start is not None and self.row_range_end is not None:
-            df = df.iloc[self.row_range_start : self.row_range_end]
 
         words = []
         for _, row in df.iterrows():
@@ -31,7 +29,8 @@ class QUIZ():
             })
         
         self.words = words
-        self.words_to_ask =  random.sample(words, min(self.num_of_ques, len(words)))
+        words_ranged = words[self.row_range_start-1 : self.row_range_end]
+        self.words_to_ask =  random.sample(words_ranged, min(self.num_of_ques, len(words_ranged)))
     
     def question(self):
         word_entry = random.choice(self.words_to_ask)
@@ -128,9 +127,6 @@ class QUIZ():
                 print(f"\n- {incorrects['word']} : {incorrects['definition']}")
         else:
             print("🥳 Perfect score! No incorrect answers.")
-
-        
-
 
 QUIZ()
 
